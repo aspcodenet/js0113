@@ -4,6 +4,8 @@ import { loadPosts } from "./data/post.js";
 
 
 const newLink = document.getElementById('newLink')
+const listLink = document.getElementById('listLink')
+
 function showSection(sectionsId){
   if(sectionsId === 'sectionList'){
       sectionList.style.display = "block";
@@ -52,4 +54,8 @@ refreshItems()
 
 newLink.addEventListener("click", ()=>{
   showSection("sectionNew")
+})
+
+listLink.addEventListener("click", ()=>{
+  showSection("sectionList")
 })
