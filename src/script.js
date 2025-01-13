@@ -1,10 +1,68 @@
-import { loadPosts } from "./data/post.js";
+import { addPost, loadPost, loadPosts, updatePost } from "./data/post.js";
 
-// import * from "./data/post.js";
+//import * as Posts from "./data/post.js";
 
 
 const newLink = document.getElementById('newLink')
 const listLink = document.getElementById('listLink')
+
+
+const submitNewButton =  document.getElementById("submitNewButton")
+const newTitle =  document.getElementById("newTitle")
+const newUserId =  document.getElementById("newUserId")
+const newBody =  document.getElementById("newBody")
+
+
+submitNewButton.addEventListener("click",async (ev)=>{
+    ev.preventDefault()
+    let post = {
+        title: newTitle.value,
+        userId:newUserId.value,
+        body:newBody.value
+    }
+    await addPost(post)
+    refreshItems()
+    showSection("sectionList")
+});
+
+
+
+
+const submitEditButton =  document.getElementById("submitEditButton")
+const editTitle =  document.getElementById("editTitle")
+const editUserId =  document.getElementById("editUserId")
+const editBody =  document.getElementById("editBody")
+const editId =  document.getElementById("editId")
+
+
+async function editMe(id){
+  let player = await loadPost(id)
+  editId.value = player.id
+  editTitle.value = player.title
+  editUserId.value = player.userId
+  editBody.value = player.body
+  showSection("sectionEdit");
+  
+}
+
+
+submitEditButton.addEventListener("click",async (ev)=>{
+    ev.preventDefault()
+    let post = {
+        title: editTitle.value,
+        userId:editUserId.value,
+        body:editBody.value,
+        id:editId.value
+    }
+    await updatePost(post)
+    refreshItems()
+    showSection("sectionList")
+});
+
+
+
+
+
 
 function showSection(sectionsId){
   if(sectionsId === 'sectionList'){
@@ -27,13 +85,39 @@ function showSection(sectionsId){
 
 
 function renderTr(player){
-  let template = `<tr>
-                      <td>${player.userId}</td>
-                      <td>${player.title}</td>
-                      <td>${player.body}</td>
-                      <td><a href="#" >EDIT</td>
-                  </tr>`
-  productTableBody.innerHTML = productTableBody.innerHTML + template;
+  // WHEN EDIT !!!
+  let tr = document.createElement("tr")
+  productTableBody.appendChild(tr)   
+  let td = document.createElement("td")
+  td.textContent = player.userId
+  tr.appendChild(td)
+
+  td = document.createElement("td")
+  td.textContent = player.title
+  tr.appendChild(td)
+
+  td = document.createElement("td")
+  td.textContent = player.body
+  tr.appendChild(td)
+
+  td = document.createElement("td")
+  
+  let btn = document.createElement("button")
+  btn.textContent = "EDIT"
+  btn.addEventListener("click",function(){
+      alert("EDIT " + player.id)             
+      editMe(player.id)
+  });
+  
+  td.appendChild(btn)
+  tr.appendChild(td)
+  // let template = `<tr>
+  //                     <td>${player.userId}</td>
+  //                     <td>${player.title}</td>
+  //                     <td>${player.body}</td>
+  //                     <td><a href="#" click="editMe(${player.id})" >EDIT</td>
+  //                 </tr>`
+  // productTableBody.innerHTML = productTableBody.innerHTML + template;
 }
 
 const productTableBody = document.getElementById('productTableBody')

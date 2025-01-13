@@ -1,7 +1,7 @@
 import axios from "axios";
 
 
-const url = 'https://jsonplaceholder.typicode.com/posts';
+const url = 'http://localhost:3000/posts';
 
 
 export async function loadPosts(){
@@ -12,3 +12,31 @@ export async function loadPosts(){
   
     // return posts
 }
+
+
+export async function addPost(blogpost) {
+    const response = await axios.post(url,blogpost, {
+        headers: {
+            'Accept': 'application/json, text/plain',
+            'Content-Type': 'application/json;charset=UTF-8'
+        }
+    });
+  }  
+
+
+  export async function loadPost(id) {
+    const response = await axios.get(url + '/' + id);
+    const players = response.data;
+    return players
+  }
+
+
+
+  export async function updatePost(blogpost) {
+    const response = await axios.put(url + '/' + blogpost.id,blogpost, {
+      headers: {
+          'Accept': 'application/json, text/plain',
+          'Content-Type': 'application/json;charset=UTF-8'
+      }
+  });
+}    
